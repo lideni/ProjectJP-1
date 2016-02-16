@@ -24,29 +24,29 @@ public class SplashScreen implements Screen {
     private Sprite logoSprite;
     private Music introTheme;
 
-    private float width, height;
-    private float aspectRatio;
+    private float deviceWidth, deviceHeight;
+    private float deviceAspectRatio;
 
-    static final int WORLD_WIDTH = 1024;
-    static final int WORLD_HEIGHT = 512;
+    static final int WORLD_WIDTH = 256;
+    static final int WORLD_HEIGHT = 128;
 
     public SplashScreen() {
-        width = Gdx.graphics.getWidth();
-        height = Gdx.graphics.getHeight();
-        aspectRatio = width / height;
+        deviceWidth = Gdx.graphics.getWidth();
+        deviceHeight = Gdx.graphics.getHeight();
+        deviceAspectRatio = deviceWidth / deviceHeight;
 
         batch = new SpriteBatch();
         atlas = new TextureAtlas("images/splash_screen.pack");
-        background = atlas.findRegion("main_screen_bkg");
+
+        background = atlas.findRegion("main_background");
         backgroundSprite = new Sprite(background);
         backgroundSprite.setPosition(0, 0);
-        backgroundSprite.setSize(WORLD_WIDTH, WORLD_HEIGHT);
-        logo = atlas.findRegion("title");
-        logoSprite = new Sprite(logo);
-        logoSprite.setScale(0.3f);
-        logoSprite.setPosition(WORLD_WIDTH/2f - logoSprite.getWidth()/2f, WORLD_HEIGHT/2f - logoSprite.getHeight()/2f);
 
-        camera = new OrthographicCamera(WORLD_HEIGHT * aspectRatio, WORLD_HEIGHT);
+        logo = atlas.findRegion("jp_logo");
+        logoSprite = new Sprite(logo);
+        logoSprite.setPosition(WORLD_WIDTH /2f - logoSprite.getWidth()/2f, WORLD_HEIGHT /2f - logoSprite.getHeight()/2f);
+
+        camera = new OrthographicCamera(WORLD_HEIGHT * deviceAspectRatio, WORLD_HEIGHT);
         camera.position.set(WORLD_WIDTH / 2f, WORLD_HEIGHT /2f, 0);
         camera.update();
 
