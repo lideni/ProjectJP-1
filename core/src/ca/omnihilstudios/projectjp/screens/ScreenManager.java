@@ -14,13 +14,19 @@ public class ScreenManager {
         this.game = game;
     }
 
-    // Show the screen retrieved from the enum
     public void showScreen(ScreenEnum screenEnum, Object... params) {
         // Get current screen to dispose of it
         Screen currentScreen = game.getScreen();
 
         // Show new screen
-        Screen newScreen = screenEnum.getScreen(params);
+        AbstractScreen newScreen;
+        switch(screenEnum) {
+            case SPLASH_SCREEN:
+                newScreen = new SplashScreen(game);
+                break;
+            default:
+                newScreen = null;
+        }
         game.setScreen(newScreen);
 
         // Dispose of previous screen

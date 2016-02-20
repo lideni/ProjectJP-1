@@ -18,4 +18,9 @@ public class ProjectJP extends Game {
 
 		screenManager.showScreen(ScreenEnum.SPLASH_SCREEN);
 	}
+
+	public ScreenManager getScreenManager() {
+		return screenManager;
+	}
+
 }

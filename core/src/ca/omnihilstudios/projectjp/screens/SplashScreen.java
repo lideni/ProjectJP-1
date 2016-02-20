@@ -1,5 +1,6 @@
 package ca.omnihilstudios.projectjp.screens;
 
+import ca.omnihilstudios.projectjp.ProjectJP;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 /**
  * Created by Sean on 1/26/2016.
  */
-public class SplashScreen implements Screen {
+public class SplashScreen extends AbstractScreen {
 
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -30,7 +31,9 @@ public class SplashScreen implements Screen {
     static final int WORLD_WIDTH = 256;
     static final int WORLD_HEIGHT = 128;
 
-    public SplashScreen() {
+    public SplashScreen(ProjectJP game) {
+        super(game);
+
         deviceWidth = Gdx.graphics.getWidth();
         deviceHeight = Gdx.graphics.getHeight();
         deviceAspectRatio = deviceWidth / deviceHeight;
