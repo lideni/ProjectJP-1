@@ -8,19 +8,9 @@ import com.badlogic.gdx.Screen;
  */
 public class ScreenManager {
 
-    private static ScreenManager instance = new ScreenManager();
-    private ProjectJP game;
+    private final ProjectJP game;
 
-    private ScreenManager() {
-        super();
-    }
-
-    public static ScreenManager getInstance() {
-        return instance;
-    }
-
-    // Initialization
-    public void initialize(ProjectJP game) {
+    public ScreenManager(ProjectJP game) {
         this.game = game;
     }
 
