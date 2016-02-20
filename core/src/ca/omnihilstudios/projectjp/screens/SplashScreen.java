@@ -4,82 +4,67 @@ import ca.omnihilstudios.projectjp.ProjectJP;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Sean on 1/26/2016.
  */
 public class SplashScreen extends AbstractScreen {
 
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
-    private TextureAtlas atlas;
-    private TextureRegion background;
-    private Sprite backgroundSprite;
-    private TextureRegion logo;
-    private Sprite logoSprite;
     private Music introTheme;
 
-    private float deviceWidth, deviceHeight;
-    private float deviceAspectRatio;
-
-    static final int WORLD_WIDTH = 256;
-    static final int WORLD_HEIGHT = 128;
+    static final float WORLD_WIDTH = 256f;
+    static final float WORLD_HEIGHT = 128f;
+    static final String TEXTURE_PACK = "images/splash_screen.pack";
+    static final String BACKGROUND = "main_background";
+    static final String LOGO = "jp_logo";
 
     public SplashScreen(ProjectJP game) {
         super(game);
-
-        deviceWidth = Gdx.graphics.getWidth();
-        deviceHeight = Gdx.graphics.getHeight();
-        deviceAspectRatio = deviceWidth / deviceHeight;
-
-        batch = new SpriteBatch();
-        atlas = new TextureAtlas("images/splash_screen.pack");
-
-        background = atlas.findRegion("main_background");
-        backgroundSprite = new Sprite(background);
-        backgroundSprite.setPosition(0, 0);
-
-        logo = atlas.findRegion("jp_logo");
-        logoSprite = new Sprite(logo);
-        logoSprite.setPosition(WORLD_WIDTH /2f - logoSprite.getWidth()/2f, WORLD_HEIGHT /2f - logoSprite.getHeight()/2f);
-
-        camera = new OrthographicCamera(WORLD_HEIGHT * deviceAspectRatio, WORLD_HEIGHT);
-        camera.position.set(WORLD_WIDTH / 2f, WORLD_HEIGHT /2f, 0);
-        camera.update();
-
-        introTheme = Gdx.audio.newMusic(Gdx.files.internal("audio/intro_theme.mp3"));
-        introTheme.setLooping(false);
-        introTheme.setVolume(0.75f);
     }
 
     @Override
     public void show() {
+        Camera camera = new OrthographicCamera();
+        Viewport viewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+        stage = new Stage(viewport);
+        Gdx.input.setInputProcessor(stage);
+
+        atlas = new TextureAtlas(Gdx.files.internal(TEXTURE_PACK));
+
+        Image background = new Image(atlas.findRegion(BACKGROUND));
+        stage.addActor(background);
+
+        Table table = new Table();
+        table.setFillParent(true);
+        Image logo = new Image(atlas.findRegion(LOGO));
+        logo.addAction(
+                Actions.sequence(
+                        Actions.alpha(0),
+                        Actions.moveBy(0f, -20f),
+                        Actions.parallel(
+                                Actions.moveBy(0f, 20f, 3f),
+                                Actions.fadeIn(3f))));
+        table.add(logo);
+        stage.addActor(table);
+
+        introTheme = Gdx.audio.newMusic(Gdx.files.internal("audio/intro_theme.mp3"));
+        introTheme.setLooping(false);
+        introTheme.setVolume(0.75f);
         introTheme.play();
-    }
-
-    @Override
-    public void render(float delta) {
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        backgroundSprite.draw(batch);
-        logoSprite.draw(batch);
-        batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
     }
 
     @Override
@@ -95,12 +80,12 @@ public class SplashScreen extends AbstractScreen {
     @Override
     public void hide() {
         introTheme.stop();
+        dispose();
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
-        atlas.dispose();
+        super.dispose();
         introTheme.dispose();
     }
 
