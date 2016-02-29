@@ -1,5 +1,6 @@
 package ca.omnihilstudios.projectjp.screens;
 
+import ca.omnihilstudios.projectjp.ProjectJP;
 import com.badlogic.gdx.Screen;
 
 /**
@@ -7,16 +8,6 @@ import com.badlogic.gdx.Screen;
  */
 public enum ScreenEnum {
 
-    SPLASH_SCREEN {
-        public Screen getScreen(Object... params) {
-            return new SplashScreen();
-        }
-    },
-    MAIN_MENU_SCREEN {
-        public Screen getScreen(Object... params) {
-            return new MainMenuScreen();
-        }
-    };
+    SPLASH_SCREEN
 
-    public abstract Screen getScreen(Object... params);
 }
